@@ -424,12 +424,9 @@ _draw_circle	endp
 _enter	proc	near
 	push	bp
 	mov	bp,sp
-	mov	al,2
-	push	ax
-	mov	ax,320
-	push	ax
-	mov	ax,100
-	push	ax
+	push	2
+	push	320
+	push	100
 	xor	ax,ax
 	push	ax
 	call	near ptr _draw_line_x
@@ -437,33 +434,23 @@ _enter	proc	near
    ;	
    ;	    draw_line_y(160, 0, 200, 2);   
    ;	
-	mov	al,2
-	push	ax
-	mov	ax,200
-	push	ax
-	xor	ax,ax
-	push	ax
-	mov	ax,160
-	push	ax
+	push	2
+	push	200
+	push	0
+	push	160
 	call	near ptr _draw_line_y
 	add	sp,8
    ;	
    ;	    print_window(10, 5, 50, 20, 3, 2, 1);
    ;	
-	mov	al,1
-	push	ax
-	mov	al,2
-	push	ax
-	mov	ax,3
-	push	ax
-	mov	ax,20
-	push	ax
-	mov	ax,50
-	push	ax
+	push	1
+	push	2
+	push	3
+	push	20
+	push	50
 	mov	ax,5
-	push	ax
-	mov	ax,10
-	push	ax
+	push	5
+	push	10
 	call	near ptr _print_window
 	add	sp,14
    ;	
