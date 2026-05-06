@@ -18,18 +18,6 @@ _mat_diff proc near
     mov byte ptr [bp-15], 10   ; newline[1]
     mov byte ptr [bp-14], 0    ; newline[2]
 
-    ; push es
-    ; lea  ax, word ptr [bp-16]   ; AX = offset of destination (stack buffer)
-    ; mov  di, ax                 ; DI = destination offset
-    ; mov  ax, ss                 ; 
-    ; mov  es, ax                 ; ES = SS (destination segment)
-    ; mov  si, offset data:newline ; SI = source offset ("\r\n" in data segment)
-    ; mov  cx, 3                  ; length to copy (2 chars + null terminator)
-    ; cld                         ; clear direction flag for forward copy
-    ; rep  movsb                  ; copy 3 bytes from DS:SI to ES:DI
-
-    ; pop es
-
     ; Check that matrix dimensions match
     ; if (mat_cols1 != mat_cols2 || mat_rows1 != mat_rows2) {
     mov  ax, word ptr ds:[MAT_DATA_OFFSET+2]
@@ -58,7 +46,7 @@ mat_diff_col_loop_start:
     ; sum = mat_data1[c][r] + mat_data2[c][r];
     ; Access: mat_data1[col][row]  (row-major? Actually column-major: [col][row])
     mov  ax, si                 ; column index
-    mov  dx, 200                ; each column has 100 rows of 2-byte shorts? Actually 200 bytes per column
+    mov  dx, 200
     imul dx                     ; dx:ax = column * 200
     mov  dx, di                 ; row index
     shl  dx, 1                  ; row * 2 (size of short)
@@ -68,7 +56,7 @@ mat_diff_col_loop_start:
     push ax                     ; save first element
 
     mov  ax, si
-    mov  dx, 200                ; 100 rows * 2 bytes = 200? Wait: maybe mat_data2 is 100 bytes per column? Inconsistent.
+    mov  dx, 200              
     imul dx
     mov  dx, di
     shl  dx, 1

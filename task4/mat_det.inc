@@ -25,7 +25,7 @@ _mat_det proc near
     ;     short numerator;              /* temporary for exact division */
     ;     short det;                    /* final determinant */
     ;
-    ;     /* If not square (should not happen), return 0 and print it. */
+    ;     
     ;     if (mat_rows1 != mat_cols1) {
     ;
     mov ax, word ptr es:[MAT_DATA_OFFSET]
