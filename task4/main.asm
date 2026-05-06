@@ -36,6 +36,7 @@ data segment para public use16
     ERROR_LSEEK equ 2
 
     err_unknown_operation   db "Unknown operation!",0    
+    err_invalid_matrix_size db "Invalid matrix size for operation!", 0
 
     fio_err_no_error        db " ", 0                                ; code 0 (no error, rarely used)
     fio_err_invalid_func    db "Invalid function", 0dh, 0ah, 0      ; code 1
@@ -362,6 +363,7 @@ _bo_mat_op_calc proc near
     mov bx, word ptr [bp+var2]
 
     call bx
+    jc _bo_mat_op_calc_dim_failed
     add sp, 2    
 
     pop ds
@@ -385,9 +387,20 @@ _bo_mat_op_calc_open_failed:
 
     jmp _bo_mat_op_calc_done
 
-    mov sp, bp
-    pop bp
-    ret
+_bo_mat_op_calc_dim_failed:
+    add sp, 2
+    pop ds
+
+    push word ptr [bp+var1]
+    call _fclose
+    add sp, 2
+
+    push offset err_invalid_matrix_size
+    call _putstr
+    add sp, 2
+
+
+    jmp _bo_mat_op_calc_done
 _bo_mat_op_calc endp
 
 _main proc near 
@@ -419,6 +432,8 @@ _main proc near
     push ax
     call _select_op
     jc main_unknown_op_branch
+
+    call putnewline
 
     call _bo_mat_op_calc
 
